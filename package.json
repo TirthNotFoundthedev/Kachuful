@@ -1,0 +1,21 @@
+{
+  "name": "kachuful",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Kachuful (Judgement) - online multiplayer Indian trick-taking card game",
+  "packageManager": "pnpm@10.28.0",
+  "engines": {
+    "node": ">=20.11"
+  },
+  "scripts": {
+    "dev": "pnpm --parallel --filter @kachuful/server --filter @kachuful/web dev",
+    "dev:server": "pnpm --filter @kachuful/server dev",
+    "dev:web": "pnpm --filter @kachuful/web dev",
+    "build": "pnpm -r build",
+    "build:server": "pnpm --filter @kachuful/server build",
+    "build:web": "pnpm --filter @kachuful/web build",
+    "start": "pnpm --filter @kachuful/server start",
+    "test": "pnpm -r test",
+    "typecheck": "pnpm -r typecheck"
+  }
+}

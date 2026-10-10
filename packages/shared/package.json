@@ -1,0 +1,22 @@
+{
+  "name": "@kachuful/shared",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Pure Kachuful rules engine, bot heuristics and typed socket protocol. No I/O.",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "devDependencies": {
+    "typescript": "5.9.3",
+    "vitest": "4.1.11"
+  }
+}
