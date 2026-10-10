@@ -185,8 +185,9 @@ export class Room {
     if (byId !== this.hostId) return err('NOT_HOST', 'Only the host can add bots.');
     if (this.phase !== 'LOBBY') return err('GAME_IN_PROGRESS', 'Bots can only be added in the lobby.');
     if (this.members.length >= MAX_PLAYERS) return err('ROOM_FULL', `This room is full (${MAX_PLAYERS} players).`);
-    const used = new Set(this.members.map((m) => m.name));
-    const base = BOT_NAMES.find((n) => !used.has(`${n} (bot)`)) ?? 'Bot';
+    // Skip names already at the table (as a person or a bot) to avoid "Asha" next to "Asha (bot)".
+    const used = new Set(this.members.map((m) => m.name.replace(/ \(bot\)$/, '').toLowerCase()));
+    const base = BOT_NAMES.find((n) => !used.has(n.toLowerCase())) ?? 'Bot';
     this.members.push({
       id: randomUUID(),
       name: this.uniqueName(`${base} (bot)`),
