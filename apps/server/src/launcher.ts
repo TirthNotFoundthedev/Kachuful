@@ -12,11 +12,14 @@ import { loadConfig } from './config';
  *
  *   server.exe [--web https://your-app.vercel.app] [--no-tunnel] [--port 3001]
  *
- * The web address can also come from WEB_URL or a one-line web-url.txt next to the exe.
+ * The web app defaults to https://kachuphul-bytirth.vercel.app; override it with --web, WEB_URL
+ * or a one-line web-url.txt next to the exe.
  */
 
 const CLOUDFLARED_URL = 'https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-windows-amd64.exe';
 const TUNNEL_URL_RE = /https:\/\/[a-z0-9-]+\.trycloudflare\.com/;
+
+const DEFAULT_WEB_URL = 'https://kachuphul-bytirth.vercel.app';
 
 const exeDir = dirname(process.execPath);
 const args = process.argv.slice(2);
@@ -26,7 +29,7 @@ function flag(name: string): string | undefined {
   return i >= 0 ? args[i + 1] : undefined;
 }
 
-function webUrl(): string | undefined {
+function webUrl(): string {
   const fromFile = (() => {
     try {
       return readFileSync(join(exeDir, 'web-url.txt'), 'utf8').trim();
@@ -35,7 +38,7 @@ function webUrl(): string | undefined {
     }
   })();
   const raw = flag('--web') ?? process.env.WEB_URL ?? fromFile;
-  return raw ? raw.replace(/\/$/, '') : undefined;
+  return (raw || DEFAULT_WEB_URL).replace(/\/$/, '');
 }
 
 async function ensureCloudflared(): Promise<string> {
@@ -109,17 +112,15 @@ async function main(): Promise<void> {
   }
 
   const web = webUrl();
-  const link = web ? `${web}/?server=${encodeURIComponent(publicUrl)}` : undefined;
+  const link = `${web}/?server=${encodeURIComponent(publicUrl)}`;
   console.log('\n================================================');
   console.log(`Server address: ${publicUrl}`);
-  if (link) {
-    console.log(`\nShare this link with players (copied to clipboard):\n\n  ${link}\n`);
-    copyToClipboard(link);
-  } else {
-    console.log('\nNo web address set. Open your Vercel site, click "Server", and paste the address above.');
-    console.log('To get a ready-made link, run with --web https://your-app.vercel.app (or put it in web-url.txt).');
-    copyToClipboard(publicUrl);
-  }
+  console.log(`
+Share this link with players (copied to clipboard):
+
+  ${link}
+`);
+  copyToClipboard(link);
   console.log('================================================');
   console.log('Keep this window open while you play. Close it to stop the server.\n');
 
