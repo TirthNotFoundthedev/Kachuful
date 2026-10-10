@@ -1,0 +1,19 @@
+# Render Blueprint for the Kachuful game server (Dashboard -> New -> Blueprint).
+services:
+  - type: web
+    name: kachuful-server
+    runtime: node
+    plan: free
+    region: singapore
+    branch: main
+    buildCommand: corepack enable && pnpm install --frozen-lockfile && pnpm --filter @kachuful/server build
+    startCommand: node apps/server/dist/index.js
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      # Comma-separated browser origins allowed to connect, e.g.
+      # https://kachuful.vercel.app,https://kachuful-*.vercel.app
+      - key: CLIENT_ORIGINS
+        sync: false

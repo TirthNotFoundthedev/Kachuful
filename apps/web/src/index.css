@@ -1,0 +1,89 @@
+@import 'tailwindcss';
+
+/*
+ * Design tokens. The table is the identity: deep felt green, cream card stock,
+ * ink and a single marigold accent reserved for "your move" moments.
+ * Fraunces echoes old printed card indices; Atkinson Hyperlegible keeps small
+ * text readable on phones.
+ */
+@theme {
+  --font-display: 'Fraunces', ui-serif, Georgia, serif;
+  --font-sans: 'Atkinson Hyperlegible', ui-sans-serif, system-ui, sans-serif;
+
+  --color-felt-950: #071f17;
+  --color-felt-900: #0b2a1f;
+  --color-felt-800: #0e3326;
+  --color-felt-700: #134432;
+  --color-felt-600: #1a5a42;
+  --color-felt-500: #2a7357;
+  --color-felt-300: #8fb8a5;
+  --color-felt-200: #c4ddd1;
+
+  --color-card: #fbf7ee;
+  --color-card-edge: #d9d0bd;
+  --color-ink: #1c1b19;
+  --color-suit-red: #b3212a;
+  --color-suit-black: #1c1b19;
+
+  --color-marigold: #f2b33d;
+  --color-marigold-strong: #e09a12;
+  --color-danger: #ef8a7c;
+
+  --radius-card: 0.5rem;
+}
+
+@layer base {
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+  body {
+    @apply bg-felt-800 font-sans text-felt-200 antialiased;
+    background-image: radial-gradient(ellipse at 50% 35%, var(--color-felt-700) 0%, var(--color-felt-800) 55%, var(--color-felt-900) 100%);
+    background-attachment: fixed;
+    -webkit-tap-highlight-color: transparent;
+    overscroll-behavior: none;
+  }
+  button {
+    cursor: pointer;
+  }
+  button:disabled {
+    cursor: not-allowed;
+  }
+  :focus-visible {
+    outline: 3px solid var(--color-marigold);
+    outline-offset: 2px;
+  }
+}
+
+@utility btn {
+  @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-md px-4 text-base font-bold transition-colors select-none disabled:opacity-45;
+}
+@utility btn-primary {
+  @apply btn bg-marigold text-ink hover:bg-marigold-strong disabled:hover:bg-marigold;
+}
+@utility btn-quiet {
+  @apply btn border border-felt-500 bg-felt-900/60 text-felt-200 hover:bg-felt-700;
+}
+@utility btn-icon {
+  @apply inline-flex size-11 shrink-0 items-center justify-center rounded-md border border-felt-600 bg-felt-900/60 text-felt-200 hover:bg-felt-700;
+}
+@utility panel {
+  @apply rounded-lg border border-felt-600 bg-felt-900/80;
+}
+@utility input {
+  @apply min-h-12 w-full rounded-md border border-felt-500 bg-felt-950/70 px-3 text-lg text-card placeholder:text-felt-300/70 focus:border-marigold focus:outline-none;
+}
+@utility label {
+  @apply mb-1 block text-sm font-bold text-felt-300;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
