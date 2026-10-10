@@ -22,3 +22,6 @@ Thumbs.db
 
 # Logs
 *.log
+
+# Packaged server.exe build output
+dist-exe/

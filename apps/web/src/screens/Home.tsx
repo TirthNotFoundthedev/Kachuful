@@ -1,5 +1,6 @@
 import { MAX_NAME_LENGTH, ROOM_CODE_LENGTH } from '@kachuful/shared';
 import { type FormEvent, useState } from 'react';
+import { SERVER_URL, setServerUrl } from '../config';
 import { HowToPlay } from '../components/HowToPlay';
 import { loadName } from '../net/session';
 import { createRoom, joinRoom, useApp } from '../net/store';
@@ -12,6 +13,8 @@ export function Home() {
   const [busy, setBusy] = useState<'create' | 'join' | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [rulesOpen, setRulesOpen] = useState(false);
+  const [serverOpen, setServerOpen] = useState(false);
+  const [serverInput, setServerInput] = useState(SERVER_URL);
   const invited = route.name === 'home' && Boolean(route.code);
 
   const trimmed = name.trim();
@@ -92,9 +95,41 @@ export function Home() {
         {conn !== 'connected' && <p className="text-sm text-felt-300">Connecting to the server…</p>}
       </div>
 
-      <button type="button" className="self-start text-base font-bold text-felt-200 underline underline-offset-4" onClick={() => setRulesOpen(true)}>
-        How to play
-      </button>
+      <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
+        <button type="button" className="text-base font-bold text-felt-200 underline underline-offset-4" onClick={() => setRulesOpen(true)}>
+          How to play
+        </button>
+        <button type="button" className="text-base font-bold text-felt-200 underline underline-offset-4" onClick={() => setServerOpen((o) => !o)}>
+          Server
+        </button>
+      </div>
+      {serverOpen && (
+        <form
+          className="panel space-y-2 p-5"
+          onSubmit={(e) => {
+            e.preventDefault();
+            if (!setServerUrl(serverInput)) setError('Enter a full server address, like https://example.trycloudflare.com');
+          }}
+        >
+          <label htmlFor="server" className="label">
+            Game server address
+          </label>
+          <div className="flex gap-2">
+            <input
+              id="server"
+              className="input"
+              value={serverInput}
+              inputMode="url"
+              autoCapitalize="none"
+              autoComplete="off"
+              onChange={(e) => setServerInput(e.target.value)}
+            />
+            <button type="submit" className="btn-quiet shrink-0">
+              Connect
+            </button>
+          </div>
+        </form>
+      )}
       <HowToPlay open={rulesOpen} onClose={() => setRulesOpen(false)} decks={1} tieBreak="exactBids" />
     </main>
   );

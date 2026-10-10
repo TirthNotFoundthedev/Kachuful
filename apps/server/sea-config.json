@@ -1,0 +1,6 @@
+{
+  "main": "dist-exe/launcher.cjs",
+  "output": "dist-exe/server.exe",
+  "disableExperimentalSEAWarning": true,
+  "useCodeCache": false
+}

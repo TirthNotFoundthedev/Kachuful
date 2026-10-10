@@ -16,6 +16,7 @@
     "build:web": "pnpm --filter @kachuful/web build",
     "start": "pnpm --filter @kachuful/server start",
     "test": "pnpm -r test",
-    "typecheck": "pnpm -r typecheck"
+    "typecheck": "pnpm -r typecheck",
+    "build:exe": "pnpm --filter @kachuful/server build:exe"
   }
 }

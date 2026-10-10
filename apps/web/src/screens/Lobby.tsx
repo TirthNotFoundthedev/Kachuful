@@ -11,6 +11,7 @@ import {
   totalRounds,
 } from '@kachuful/shared';
 import { useState } from 'react';
+import { serverQuery } from '../config';
 import { HowToPlay } from '../components/HowToPlay';
 import { request } from '../net/socket';
 import { leaveRoom, send, toast } from '../net/store';
@@ -19,7 +20,7 @@ export function Lobby({ snap }: { snap: RoomSnapshot }) {
   const me = snap.players.find((p) => p.id === snap.youId);
   const isHost = snap.hostId === snap.youId;
   const [rulesOpen, setRulesOpen] = useState(false);
-  const shareUrl = `${window.location.origin}/r/${snap.code}`;
+  const shareUrl = `${window.location.origin}/r/${snap.code}${serverQuery()}`;
   const n = snap.players.length;
   const notReady = snap.players.filter((p) => !p.ready);
   const startBlocker =

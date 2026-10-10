@@ -37,6 +37,16 @@ The plan asked for Vercel (web) + Render (server), and that is what this repo is
 
 The engine and room logic are transport-independent, so moving to Durable Objects or adding Redis later is a contained change.
 
+## Run the server from your laptop (server.exe)
+
+Instead of Render, you can host the web app on Vercel and run the game server on your own machine.
+
+1. Build it once: `pnpm build:exe`. This writes `apps/server/dist-exe/server.exe` (or download it from GitHub Releases).
+2. Double-click `server.exe`. On first run it downloads `cloudflared.exe` next to itself and opens a free Cloudflare quick tunnel.
+3. It prints a link like `https://your-app.vercel.app/?server=https://xxxx.trycloudflare.com` and copies it to the clipboard. Send that link to players. The tunnel address changes every run, so share the new link each time.
+
+The web address comes from `--web https://your-app.vercel.app`, the `WEB_URL` variable, or a one-line `web-url.txt` next to the exe. Without it the exe prints only the server address, which you can paste into the **Server** link on the Vercel home screen. Other flags: `--no-tunnel` (this machine only) and `--port 3002`. When `CLIENT_ORIGINS` is not set the exe accepts any web origin.
+
 ## How it works
 
 ### Game state machine

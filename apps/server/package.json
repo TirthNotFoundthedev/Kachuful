@@ -10,7 +10,8 @@
     "build": "tsup",
     "start": "node dist/index.js",
     "typecheck": "tsc -p tsconfig.json",
-    "test": "vitest run"
+    "test": "vitest run",
+    "build:exe": "tsup --config tsup.exe.config.ts && node --build-sea sea-config.json"
   },
   "dependencies": {
     "socket.io": "4.8.4"
