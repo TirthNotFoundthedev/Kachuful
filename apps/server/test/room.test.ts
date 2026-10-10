@@ -110,6 +110,15 @@ describe('Room lobby rules', () => {
     expect(new Set(room.members.map((m) => m.name)).size).toBe(10);
   });
 
+  it('never names a bot after a person already at the table', () => {
+    const room = new Room('ROOM6', timings);
+    const host = room.addHuman('Asha', 's0');
+    if (!host.ok) throw new Error();
+    room.addBot(host.data.id);
+    room.addBot(host.data.id);
+    expect(room.members.map((m) => m.name)).toEqual(['Asha', 'Bhanu (bot)', 'Chetan (bot)']);
+  });
+
   it('closes when the last human leaves, even with bots', () => {
     const room = new Room('ROOM4', timings);
     const host = room.addHuman('Solo', 's0');

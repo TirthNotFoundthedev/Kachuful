@@ -50,8 +50,9 @@ export function createApp(config: ServerConfig): App {
       origin: (origin, cb) => cb(null, allowOrigin(origin)),
       methods: ['GET', 'POST'],
     },
-    pingInterval: 20_000,
-    pingTimeout: 25_000,
+    // Detect silently dropped phones within ~20 s so auto-play can cover their turns.
+    pingInterval: 10_000,
+    pingTimeout: 10_000,
     maxHttpBufferSize: 16 * 1024,
   });
 
