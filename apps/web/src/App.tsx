@@ -1,10 +1,12 @@
 import { useEffect } from 'react';
+import { HAS_SERVER } from './config';
 import { ConnectionBanner, Toasts } from './components/Toasts';
 import { navigate, useApp, wakeServer } from './net/store';
 import { Game } from './screens/Game';
 import { GameOver } from './screens/GameOver';
 import { Home } from './screens/Home';
 import { Lobby } from './screens/Lobby';
+import { ServerSetup } from './screens/ServerSetup';
 import { WakingServer } from './screens/WakingServer';
 
 function Centered({ text }: { text: string }) {
@@ -28,6 +30,7 @@ function Screen() {
     if (route.name === 'room' && !hasSeat) navigate({ name: 'home', code: route.code }, true);
   }, [route, hasSeat]);
 
+  if (!HAS_SERVER) return <ServerSetup />;
   if (conn !== 'connected' && !snapshot && (wake === 'waking' || wake === 'failed')) return <WakingServer />;
   if (conn !== 'connected' && !snapshot) return <Centered text="Connecting…" />;
 
@@ -42,7 +45,7 @@ function Screen() {
 
 export function App() {
   useEffect(() => {
-    void wakeServer();
+    if (HAS_SERVER) void wakeServer();
   }, []);
   return (
     <>

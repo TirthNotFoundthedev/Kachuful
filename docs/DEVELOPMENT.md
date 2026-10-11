@@ -146,13 +146,13 @@ pnpm build       # server bundle -> apps/server/dist, web -> apps/web/dist
 | Render (optional) | `AWAY_DELAY_MS` | 1200 | Auto-play delay for away players |
 | Render (optional) | `ROOM_IDLE_TTL_MS` / `LOBBY_GHOST_MS` | 900000 / 90000 | Cleanup |
 | Render (optional) | `RATE_LIMIT_BURST` / `RATE_LIMIT_PER_SEC` | 20 / 10 | Per-socket event limit |
-| Vercel | `VITE_SERVER_URL` | `http://localhost:3001` | Render URL |
+| Vercel | `VITE_SERVER_URL` | `http://localhost:3001` | Render URL. Leave unset for the laptop `server.exe` setup: visitors without a `?server=` link then see a screen asking for a server address or offering the `server.exe` download |
 
 ### Cold starts and keep-alive
 
 The free Render instance sleeps after about 15 idle minutes. The web app handles this in three ways:
 
-- **Wake-up screen:** it pings `/health` on load, and after 1.5 s without an answer it shows a "Waking up the game server" screen with elapsed time. It gives up with a retry button after 2 minutes.
+- **Connecting screen:** it pings `/health` on load, and after 1.5 s without an answer it shows a "Connecting to the game server" screen with elapsed time. After 20 s (`WAKE_GIVE_UP_MS`) it offers a retry, a box for another server address, and a link to download `server.exe`. Raise `WAKE_GIVE_UP_MS` if you host on a free instance that needs longer to cold-start.
 - **Keep-alive:** while you are in a room, it pings `/health` every 4 minutes, so a game doesn't idle out.
 - **Optional:** to keep the server warm between games, point a free uptime monitor (e.g. UptimeRobot or cron-job.org) at `/health` every 10 minutes. One always-on free service uses about 744 of Render's 750 free instance-hours per month. Rooms live in memory, so a restart or redeploy ends any game in progress.
 

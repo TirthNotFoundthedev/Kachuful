@@ -1,10 +1,12 @@
 import { type Socket, io } from 'socket.io-client';
 import type { Ack, ClientToServerEvents, ServerToClientEvents } from '@kachuful/shared';
-import { SERVER_URL } from '../config';
+import { HAS_SERVER, SERVER_URL } from '../config';
 
 export type GameSocket = Socket<ServerToClientEvents, ClientToServerEvents>;
 
 export const socket: GameSocket = io(SERVER_URL, {
+  // Without a chosen server there is nothing to dial; wakeServer() connects once one is set.
+  autoConnect: HAS_SERVER,
   // Polling first lets the connection survive proxies; it upgrades to WebSocket immediately.
   transports: ['polling', 'websocket'],
   reconnection: true,
